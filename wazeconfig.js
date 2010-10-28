@@ -1,13 +1,38 @@
 
 //var last_searched_address
-    var g_waze_map;
+
     
-		function map_on_init() 			//called when map loads
+		function map_on_init(g_waze_map) 			//called when map loads
 		{
 		  console.log('map_on_init done');
 	  	g_waze_map.find('יד חרוצים 12','map_find_callback'); //g_waze_map global variable
     }
-    
+
+ function printMap() {
+    // fetch the extent and image size
+    var mapview = document.getElementById('map').contentWindow.map;
+    var layers  = document.getElementById('map').contentWindow.layers;
+    var extent  = mapview.getExtent();
+        extent  = [extent.left,extent.bottom,extent.right,extent.top].join('+');
+    var width   = mapview.getSize().w;
+    var height  = mapview.getSize().h;
+    // build a comma-joined list of layers
+    var activelayers = [];
+    for (i in layers) {
+      if (!layers[i].getVisibility()) continue;
+      if (!layers[i].calculateInRange()) continue;
+      activelayers[activelayers.length] = layers[i].params['LAYERS'];
+    }
+    activelayers = activelayers.join('+');
+    // open a window to our pure-Mapserver version
+    var url = '/cgi-bin/mapserv?map=/maps/spraywatch2/wms/mapfile.map';
+        url += '&mode=map';
+        url += '&mapext=' + extent;
+        url += '&mapsize=' + width+'+'+height;
+        url += '&layers=' + activelayers;
+    return url;
+  }
+  
     function map_find_callback(response)
 		{
 		  console.log('map_find_callback done');

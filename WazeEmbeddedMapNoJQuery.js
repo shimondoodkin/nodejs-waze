@@ -27150,7 +27150,7 @@ function waze_map_info_callback(map_info) {
         }, 0);
     }
     if (typeof(onWazeMapInit) == "function") onWazeMapInit();
-    else if (typeof(g_waze_config.callback) == "function") g_waze_config.callback();
+    else if (typeof(g_waze_config.callback) == "function") g_waze_config.callback(g_waze_map);
 }
 $().ready(function () {
 console.log('ready called');
